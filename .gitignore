@@ -1,0 +1,6 @@
+target
+plugins
+temp
+targetplatform
+.DS_Store
+dockerimage.tgz
