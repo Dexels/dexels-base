@@ -11,7 +11,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+            - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - run: |
           ant -lib ant/lib/jsch-0.1.55.jar targetplatform -Dupload=true -Dversion="3.1.${CIRCLE_BUILD_NUM}"
           ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_3.1.${CIRCLE_BUILD_NUM}/"
@@ -19,7 +19,7 @@ jobs:
       - save_cache:
             paths:
               - ~/.m2
-            key: maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
+            key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
   build:
     branch:
       only:
@@ -43,7 +43,7 @@ jobs:
       - save_cache:
             paths:
               - ~/.m2
-            key: maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
+            key: maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - persist_to_workspace:
           root: ~/repo
           paths:
