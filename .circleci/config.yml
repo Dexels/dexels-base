@@ -9,10 +9,17 @@ jobs:
       TERM: dumb
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - run: |
           ant -lib ant/lib/jsch-0.1.55.jar targetplatform -Dupload=true -Dversion="3.1.${CIRCLE_BUILD_NUM}"
           ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_3.1.${CIRCLE_BUILD_NUM}/"
           scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_3.1.${CIRCLE_BUILD_NUM} 
+      - save_cache:
+            paths:
+              - ~/.m2
+            key: maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
   build:
     branch:
       only:
@@ -25,11 +32,18 @@ jobs:
       TERM: dumb
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - run: |
           ant -Ddocker=false -Dupload=false -debug
           rm -rf temp/target temp/container temp/pom.xml
           ls -l
           pwd
+      - save_cache:
+            paths:
+              - ~/.m2
+            key: maven-repo-v1-{{ .Branch }}-{{ checksum "pom.xml" }}
       - persist_to_workspace:
           root: ~/repo
           paths:
