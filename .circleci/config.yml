@@ -34,8 +34,6 @@ jobs:
           root: ~/repo
           paths:
             - temp
-            - navajo-container
-            - navajo-sportlink
             - targetplatform
   package:
     machine:
@@ -63,10 +61,3 @@ workflows:
       - package:
           requires:
             - build
-      - package_navajo:
-          requires:
-            - build
-            - package
-      - package_sportlink:
-          requires:
-            - package_navajo
