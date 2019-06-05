@@ -51,7 +51,7 @@ else
   echo "Detected FILE_REPOSITORY_PATH, so not deleting storage"
 fi
 
-rm -rf /opt/felix/felix-cache
+rm -rf /opt/felix/felix-cache/*
 cd /opt/felix
 echo "Startup flags: ${flag} LOGLEVEL: ${LOGLEVEL} LOGAPPENDERS: ${LOGAPPENDERS} FELIX_OPTS: ${FELIX_OPTS}"
 exec java -DLOGLEVEL=${LOGLEVEL} -DLOGAPPENDERS=${LOGAPPENDERS} ${FELIX_OPTS} ${NONINTERACTIVE} -Dmvncache=/opt/felix/mvncache -Duser.dir=/opt/felix ${flag} -jar bin/felix.jar
