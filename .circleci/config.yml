@@ -13,9 +13,9 @@ jobs:
           keys:
             - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - run: |
-          ant -lib ant/lib/jsch-0.1.55.jar targetplatform -Dupload=true -Dversion="3.2.${CIRCLE_BUILD_NUM}"
-          ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_3.1.${CIRCLE_BUILD_NUM}/"
-          scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_3.1.${CIRCLE_BUILD_NUM} 
+          ant -lib ant/lib/jsch-0.1.55.jar targetplatform -Dupload=true -Dversion="${MINORTAG}.${CIRCLE_BUILD_NUM}"
+          ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}/"
+          scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM} 
       - save_cache:
             paths:
               - ~/.m2
