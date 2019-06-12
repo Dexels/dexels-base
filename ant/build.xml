@@ -14,7 +14,6 @@
 	<property name="felix.version">6.0.3</property>
 	<property name="felix.version.clean">6.0.3</property>
 
-
 	<condition property="upload">
 		<istrue value="${upload}"/>
 	</condition>
@@ -37,12 +36,12 @@
 	<target name="createtargetplatform">
 		<delete dir="targetplatform"/>
 		<mkdir dir="targetplatform"/>
-		<createp2 groups="${groups}" id="dexels-navajo-target" version="${feature_version}" bundles="oao.cfg,appstore.cfg,dependency.cfg,core.cfg" template="ant/pom-create-targetplatform-template.xml" destination="targetplatform/pom.xml" />
+		<createp2 groups="${groups}" id="dexels-navajo-target" version="${feature_version}" bundles="oao.cfg,appstore.cfg,targetplatform.cfg,dependency.cfg,core.cfg" template="ant/pom-create-targetplatform-template.xml" destination="targetplatform/pom.xml" />
 	</target>
 	<target name="createmaven">
 		<delete dir="temp"/>
 		<mkdir dir="temp"/>
-		<appendpom groups="${groups}" bundles="${bundles}" template="ant/pom-template.xml" destination="temp/pom.xml" />
+		<appendpom groups="${groups}" bundles="core.cfg,dependency.cfg" template="ant/pom-template.xml" destination="temp/pom.xml" />
 	</target>
 
 	<target name="runmaven" depends="createmaven">
@@ -118,7 +117,6 @@
 		</tar>
 	</target>
 	<target name="mavendeploy" depends="gzip" if="upload">
-		<!--		mvn deploy:deploy-file -DrepositoryId=dexels -Durl=http://repo.dexels.com/nexus/content/repositories/thirdparty -DgroupId=com.dexels.thirdparty -DartifactId=$2 -Dversion=$3 -Dfile=$1 -Dpackaging=jar-->
 		<exec dir="target" executable="mvn">
 			<arg value="deploy:deploy-file"/>
 			<arg value="-DrepositoryId=dexels"/>
