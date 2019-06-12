@@ -67,6 +67,8 @@ jobs:
           docker push dexels/dexels-base:$TAG
           docker push dexels/dexels-base:latest
           curl -X POST --header "Content-Type: application/json" -d '{"branch":"master"}' "https://circleci.com/api/v1.1/project/github/dexels/navajo-container/build?circle-token=${CIRCLE_TOKEN}"
+          curl -X POST --header "Content-Type: application/json" -d '{"branch":"master"}' "https://circleci.com/api/v1.1/project/github/dexels/navajo-streams/build?circle-token=${CIRCLE_TOKEN}"
+          curl -X POST --header "Content-Type: application/json" -d '{"branch":"master"}' "https://circleci.com/api/v1.1/project/github/dexels/navajo-vaadin/build?circle-token=${CIRCLE_TOKEN}"
 workflows:
   version: 2
   workflow:
