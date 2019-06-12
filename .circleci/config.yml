@@ -13,7 +13,7 @@ jobs:
           keys:
             - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - run: |
-          ant -lib ant/lib/jsch-0.1.55.jar targetplatform -Dupload=true -Dversion="${MINORTAG}.${CIRCLE_BUILD_NUM}"
+          ant targetplatform -Dupload=true -Dversion="${MINORTAG}.${CIRCLE_BUILD_NUM}"
           ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}/"
           scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM} 
       - save_cache:
@@ -36,7 +36,7 @@ jobs:
           keys:
             - maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - run: |
-          ant -Ddocker=false -Dupload=false -debug
+          ant -Ddocker=false -Dupload=false -Dbundles=core.cfg,dependency.cfg -Dversion=5.0.0 -debug
           rm -rf temp/target temp/container temp/pom.xml
           ls -l
           pwd
