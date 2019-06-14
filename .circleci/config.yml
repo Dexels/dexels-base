@@ -36,10 +36,10 @@ jobs:
           keys:
             - maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - run: |
-          ant -Ddocker=false -Dupload=false -Dbundles=core.cfg,dependency.cfg -Dversion=5.0.0 -debug
-          rm -rf temp/target temp/container temp/pom.xml
-          ls -l
-          pwd
+          ant alldistros -Ddocker=false -Dupload=false -Dbundles=core.cfg,dependency.cfg -Dversion=${MINORVERSION}.${CIRCLE_BUILD_NUM} -debug
+      - store_artifacts:
+          path: ~/repo/target/dexels-base-${MINORVERSION}.${CIRCLE_BUILD_NUM}.tar.gz
+          destination: dexels-base.tgz
       - save_cache:
             paths:
               - ~/.m2
