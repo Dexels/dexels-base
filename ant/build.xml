@@ -109,7 +109,7 @@
 
 	<target name="gzip" depends="customizedistro">
 		<mkdir dir="target"/>
-		<tar destfile="target/${distro}-${version}.tar.gz" compression="gzip">
+		<tar destfile="target/${distro}.tar.gz" compression="gzip">
 			<fileset dir="temp/unpack/felix">
 				<include name="**/*" />
 				<exclude name="felix-cache/**"/>
@@ -124,7 +124,7 @@
 			<arg value="-DgroupId=com.dexels.navajo.release"/>
 			<arg value="-DartifactId=${distro}"/>
 			<arg value="-Dversion=${version}"/>
-			<arg value="-Dfile=${distro}-${version}.tar.gz"/>
+			<arg value="-Dfile=${distro}.tar.gz"/>
 			<arg value="-Dpackaging=tar.gz"/>
 			<arg value="-B"/>
 		</exec>
