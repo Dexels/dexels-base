@@ -50,6 +50,7 @@
 			<arg value="../.circleci/conf/settings.xml"/>
 			<arg value="install"/>
 			<arg value="-B"/>
+			<arg value="-U"/>
 		</exec>
 	</target>
 	<target name="runmaventargetplatform" depends="createtargetplatform">

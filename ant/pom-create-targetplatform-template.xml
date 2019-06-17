@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -28,7 +28,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
                         </goals>
                         <configuration>
                             <featureDefinitions>
-                                <feature> <!-- Generate a feature including artifacts that are listed below inside the feature element-->
+                                <feature>                                    <!-- Generate a feature including artifacts that are listed below inside the feature element-->
                                     <id>spring.feature</id>
                                     <version>4.3.11</version>
                                     <label>Navajo Target Platform</label>
@@ -44,7 +44,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
                                 <!-- specify your depencies here -->
                                 <!-- groupId:artifactId:version -->
                                 <artifact>
-                                    <id>com.google.guava:guava:jar:23.0</id> <!-- Artifact with existing OSGi-Manifest-->
+                                    <id>com.google.guava:guava:jar:23.0</id>                                    <!-- Artifact with existing OSGi-Manifest-->
                                     <!--<transitive>false</transitive>-->
                                     <!--<source>true</source>-->
                                 </artifact>
@@ -92,45 +92,46 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
         </plugins>
     </build>
-			<repositories>
-				<repository>
-					<releases>
-						<enabled>true</enabled>
-					</releases>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
-					<id>central</id>
-					<name>Dexels Central</name>
-					<url>http://repo.dexels.com/repository/public/</url>
-					<layout>default</layout>
-				</repository>
+    <repositories>
 
-				<repository>
-					<releases>
-						<enabled>true</enabled>
-					</releases>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
-					<id>repo_thirdparty</id>
-					<name>Dexels Third</name>
-					<url>http://repo.dexels.com/repository/thirdparty/</url>
-					<layout>default</layout>
-				</repository>
-				<repository>
-					<releases>
-						<enabled>true</enabled>
-					</releases>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
-					<id>maven_central</id>
-					<name>Maven Central</name>
-					<url>https://repo.maven.apache.org/maven2/</url>
-					<layout>default</layout>
-				</repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>Dexels Central</name>
+            <url>http://repo.dexels.com/repository/public/</url>
+            <layout>default</layout>
+        </repository>
+
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>repo_thirdparty</id>
+            <name>Dexels Third</name>
+            <url>http://repo.dexels.com/repository/thirdparty/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+            <layout>default</layout>
+        </repository>
 
 
-			</repositories>
+    </repositories>
 </project>
