@@ -3,7 +3,7 @@
 	xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<import file="ant/build.xml"/>
 	<target name="targetplatform">
-		<antcall target="runmaventargetplatform">
+		<antcall target="createtargetplatform">
 			<param name="groups" value="dependency"/>
 			<param name="feature_version" value="${version}"/>
 		</antcall>
