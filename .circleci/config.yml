@@ -24,9 +24,6 @@ jobs:
               - ~/.m2
             key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
   build:
-    branch:
-      only:
-        newbuild
     docker:
       - image: circleci/openjdk:8-jdk
     working_directory: ~/repo
@@ -39,7 +36,7 @@ jobs:
           keys:
             - maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - run: |
-          ant alldistros -Ddocker=false -Dupload=false -Dbundles=core.cfg,dependency.cfg -Dversion=${MINORTAG}.${CIRCLE_BUILD_NUM} -debug
+          ant alldistros -Ddocker=false -Dupload=false -Dbundles=core.cfg -Dversion=${MINORTAG}.${CIRCLE_BUILD_NUM} -debug
           ls -l target
       - store_artifacts:
           path: ~/repo/target/dexels-base.tar.gz
