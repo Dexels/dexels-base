@@ -9,7 +9,7 @@
 		</antcall>
 	</target>
 	<target name="alldistros">
-		<antcall target="dockerpush">
+		<antcall target="mavendeploy">
 			<param name="groups" value=""/>
 			<param name="distro" value="dexels-base"/>
 			<param name="dockerdistribution" value="bare"/>
