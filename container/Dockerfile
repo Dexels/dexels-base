@@ -17,6 +17,8 @@ EXPOSE 8181
 ENV GIT_REPOSITORY_TEMP /temp
 ENV GIT_REPOSITORY_OUTPUT /output
 ENV GIT_REPOSITORY_STORAGE /storage
+ENV CONSOLE_USER admin
+ENV CONSOLE_PASS jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=
 ENV FELIX_OPTS="-Dorg.eclipse.jetty.server.Request.maxFormContentSize=3000000 -Djava.net.preferIPv4Stack=true "
 
 USER navajouser
