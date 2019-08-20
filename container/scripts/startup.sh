@@ -43,6 +43,12 @@ if [ -z "$INTERACTIVE" ]; then
 else
   export NONINTERACTIVE=''
 fi
+if [ -z "$CONSOLE_USER" ]; then
+  export CONSOLE_USER=dexels
+fi
+if [ -z "$CONSOLE_PASS" ]; then
+  export CONSOLE_PASS='{sha-256}eHpwVX+AFnneRThtRif+1CReQTxIkxHnQebptWE8aW4='
+fi
 # TODO: before startup clean all the chached and compiled scripts in this volume, so that kube restarts act correctly
 if [ -z "$FILE_REPOSITORY_PATH" ]; then
   echo "Clearing before startup..."
