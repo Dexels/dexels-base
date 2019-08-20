@@ -54,4 +54,4 @@ fi
 rm -rf /opt/felix/felix-cache/*
 cd /opt/felix
 echo "Startup flags: ${flag} LOGLEVEL: ${LOGLEVEL} LOGAPPENDERS: ${LOGAPPENDERS} FELIX_OPTS: ${FELIX_OPTS}"
-exec java -DLOGLEVEL=${LOGLEVEL} -DLOGAPPENDERS=${LOGAPPENDERS} ${FELIX_OPTS} ${NONINTERACTIVE} -Dmvncache=/opt/felix/mvncache -Duser.dir=/opt/felix ${flag} -jar bin/felix.jar
+exec java -DLOGLEVEL=${LOGLEVEL} -DLOGAPPENDERS=${LOGAPPENDERS} ${FELIX_OPTS} ${NONINTERACTIVE} -DCONSOLE_USER=$CONSOLE_USER -DCONSOLE_PASS=$CONSOLE_PASS -Dmvncache=/opt/felix/mvncache -Duser.dir=/opt/felix ${flag} -jar bin/felix.jar
