@@ -1,4 +1,4 @@
-FROM openjdk:12
+FROM openjdk:13
 MAINTAINER Frank Lyaruu
 #RUN apt-get update && apt-get install -y vim less net-tools git telnet && \
 RUN mkdir /home/navajouser && groupadd -r navajouser -g 433 && \
