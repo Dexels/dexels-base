@@ -1,7 +1,7 @@
-FROM openjdk:13
+FROM openjdk:11
 MAINTAINER Frank Lyaruu
-#RUN apt-get update && apt-get install -y vim less net-tools git telnet && \
-RUN mkdir /home/navajouser && groupadd -r navajouser -g 433 && \
+RUN apt-get update && apt-get install -y vim less net-tools git telnet && \
+mkdir /home/navajouser && groupadd -r navajouser -g 433 && \
 useradd -u 431 -r -g navajouser -d /home/navajouser -s /sbin/nologin -c "Docker image user" navajouser && \
 chown -R navajouser:navajouser /home/navajouser && \
 mkdir /storage && \
