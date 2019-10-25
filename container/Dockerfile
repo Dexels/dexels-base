@@ -1,6 +1,6 @@
-FROM openjdk:11
+FROM openjdk:13
 MAINTAINER Frank Lyaruu
-RUN apt-get update && apt-get install -y vim less net-tools git telnet && \
+RUN yum -y update && yum install -y vim less net-tools git telnet && \
 mkdir /home/navajouser && groupadd -r navajouser -g 433 && \
 useradd -u 431 -r -g navajouser -d /home/navajouser -s /sbin/nologin -c "Docker image user" navajouser && \
 chown -R navajouser:navajouser /home/navajouser && \
