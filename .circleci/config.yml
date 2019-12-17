@@ -15,7 +15,7 @@ jobs:
       - run: |
           ant targetplatform -Dupload=true -Dversion="${MINORTAG}.${CIRCLE_BUILD_NUM}"
           cd targetplatform
-          mvn -s "../.circleci/conf/settings.xml" install -B -U
+          mvn -s "../.circleci/conf/settings.xml" install -B -U -ff
           cd ..
           ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}/"
           scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM} 
