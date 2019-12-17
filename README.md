@@ -18,7 +18,7 @@ The build process works like this:
 
 - Then it runs maven to resolve those files.
 - For the base container, it will include all maven coordinates in 'core.cfg' these are the basics that should be on every installation
-- For the target platform it will include all these files: oao.cfg,sendrato.cfg,appstore.cfg,targetplatform.cfg,container.cfg,core.cfg
+- For the target platform it will include all these files: oao.cfg,sendrato.cfg,appstore.cfg,targetplatform.cfg,core.cfg
 
 
 The target platform is way more inclusive: It is intended to give a set of bundles that you might need.
