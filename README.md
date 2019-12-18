@@ -4,6 +4,7 @@ If you are reading this, you must be interested in building target platforms for
 
 Great.
 
+
 First of all, I use CircleCI for all of this. It adds a consistency for builds that is hard to match on your own machine.
 You can build it on your own machine if you want (the .circleci/config.yml basically specifies bash commands).
 
