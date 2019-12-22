@@ -9,7 +9,6 @@ jobs:
       TERM: dumb
     steps:
       - checkout
-      - run: |
       - restore_cache:
           keys:
             - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
