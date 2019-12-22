@@ -9,6 +9,7 @@ jobs:
       TERM: dumb
     steps:
       - checkout
+      - run: |
       - restore_cache:
           keys:
             - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
@@ -18,11 +19,11 @@ jobs:
           mvn -s "../.circleci/conf/settings.xml" install -B -U -ff
           cd ..
           ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}/"
-          scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM} 
+          scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}
       - save_cache:
-            paths:
-              - ~/.m2
-            key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+          paths:
+            - ~/.m2
+          key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
   build:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -42,9 +43,9 @@ jobs:
           path: ~/repo/target/dexels-base.tar.gz
           destination: dexels-base.tgz
       - save_cache:
-            paths:
-              - ~/.m2
-            key: maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+          paths:
+            - ~/.m2
+          key: maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -64,7 +65,10 @@ jobs:
           echo "Building tag: $TAG"
           cd ~/repo
           ls -l
-          docker build -t dexels/dexels-base:$TAG -t dexels/dexels-base:latest temp
+          export GIT_REMOTE=$(git config --get remote.origin.url)
+          export GIT_COMMIT=$(git rev-parse HEAD)
+
+          docker build --build-arg DEXELS_BASE_COMMIT=${GIT_COMMIT} --build-arg DEXELS_BASE_REMOTE=${GIT_REMOTE} -t dexels/dexels-base:$TAG -t dexels/dexels-base:latest temp
           docker push dexels/dexels-base:$TAG
           docker push dexels/dexels-base:latest
           curl -X POST --header "Content-Type: application/json" -d '{"branch":"master"}' "https://circleci.com/api/v1.1/project/github/dexels/navajo/build?circle-token=${CIRCLE_TOKEN}"
