@@ -66,7 +66,7 @@ jobs:
           ls -l
           export GIT_REMOTE=$(git config --get remote.origin.url)
           export GIT_COMMIT=$(git rev-parse HEAD)
-
+          echo "Adding remote: ${GIT_REMOTE} and commit: ${GIT_COMMIT}"
           docker build --build-arg DEXELS_BASE_COMMIT=${GIT_COMMIT} --build-arg DEXELS_BASE_REMOTE=${GIT_REMOTE} -t dexels/dexels-base:$TAG -t dexels/dexels-base:latest temp
           docker push dexels/dexels-base:$TAG
           docker push dexels/dexels-base:latest
