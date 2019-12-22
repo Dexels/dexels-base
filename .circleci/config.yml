@@ -50,6 +50,7 @@ jobs:
           paths:
             - temp
             - targetplatform
+            - .git
   package:
     machine:
       image: circleci/classic:edge
