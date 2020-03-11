@@ -2,7 +2,7 @@ version: 2
 jobs:
   targetplatform:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:11-jdk
     working_directory: ~/repo
     environment:
       JVM_OPTS: -Xmx1000m
@@ -23,9 +23,10 @@ jobs:
           paths:
             - ~/.m2
           key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+
   build:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:11-jdk
     working_directory: ~/repo
     environment:
       JVM_OPTS: -Xmx1000m
@@ -51,6 +52,7 @@ jobs:
             - temp
             - targetplatform
             - .git
+
   package:
     machine:
       image: circleci/classic:edge
@@ -73,6 +75,7 @@ jobs:
           docker push dexels/dexels-base:latest
           curl -X POST --header "Content-Type: application/json" -d '{"branch":"master"}' "https://circleci.com/api/v1.1/project/github/dexels/navajo/build?circle-token=${CIRCLE_TOKEN}"
           #curl -X POST --header "Content-Type: application/json" -d '{"branch":"master"}' "https://circleci.com/api/v1.1/project/github/dexels/navajo-streams/build?circle-token=${CIRCLE_TOKEN}"
+
 workflows:
   version: 2
   workflow:
