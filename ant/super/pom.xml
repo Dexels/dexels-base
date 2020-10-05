@@ -148,42 +148,42 @@
 
             <repositories>
                 <repository>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
                     <id>central</id>
                     <name>Dexels Central</name>
                     <url>http://repo.dexels.com/repository/public/</url>
                     <layout>default</layout>
-                </repository>
-
-                <repository>
                     <releases>
                         <enabled>true</enabled>
                     </releases>
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
-                    <id>repo_thirdparty</id>
-                    <name>Dexels Third</name>
+                </repository>
+
+                <repository>
+                    <id>thirdparty</id>
+                    <name>Dexels Thirdparty</name>
                     <url>http://repo.dexels.com/repository/thirdparty/</url>
                     <layout>default</layout>
-                </repository>
-
-                <repository>
                     <releases>
                         <enabled>true</enabled>
                     </releases>
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
+                </repository>
+
+                <repository>
                     <id>maven_central</id>
                     <name>Maven Central</name>
                     <url>https://repo.maven.apache.org/maven2/</url>
                     <layout>default</layout>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
                 </repository>
             </repositories>
 
@@ -210,7 +210,7 @@
 
     <organization>
         <name>Dexels</name>
-        <url>http://www.dexels.com</url>
+        <url>http://www.dexels.com/</url>
     </organization>
 
     <scm>
