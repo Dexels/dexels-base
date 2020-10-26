@@ -3,6 +3,9 @@ jobs:
   targetplatform:
     docker:
       - image: circleci/openjdk:11-jdk
+        auth:
+          username: $DOCKERHUB_USER
+          password: $DOCKERHUB_PASS
     working_directory: ~/repo
     environment:
       JVM_OPTS: -Xmx1000m
@@ -27,6 +30,9 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:11-jdk
+        auth:
+          username: $DOCKERHUB_USER
+          password: $DOCKERHUB_PASS
     working_directory: ~/repo
     environment:
       JVM_OPTS: -Xmx1000m
@@ -61,7 +67,7 @@ jobs:
           at: ~/repo
       - run: |
           docker --version
-          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
       - run: |
           TAG=${MINORTAG}.$CIRCLE_BUILD_NUM
           echo "Building tag: $TAG"
@@ -80,8 +86,14 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - targetplatform
-      - build
-      - package:
-          requires:
-            - build
+    - targetplatform:
+        context:
+        - dexels_docker_hub
+    - build:
+        context:
+        - dexels_docker_hub
+    - package:
+        context:
+        - dexels_docker_hub
+        requires:
+        - build
