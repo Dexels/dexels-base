@@ -41,8 +41,8 @@ Or, for runtime, update the kubernetes image definitions.
 
 
 ### Troubleshooting
-The nexus maven repository runs here: http://repo.dexels.com
-The eclipse p2 repository runs here: http://p2.dexels.com (you can check if it works be checking if this url returns something: http://p2.dexels.com/eclipse/equinox4.9/content.xml)
+The nexus maven repository runs here: https://repo.dexels.com
+The eclipse p2 repository runs here: https://p2.dexels.com (you can check if it works be checking if this url returns something: https://p2.dexels.com/eclipse/equinox4.9/content.xml)
 
 If either of those fail, it can't upload the artifacts, and the builds will fail.
 If the repo.dexels.com gives a 502 Bad Gateway, the nexus container has failed (but the NGINX load balancer is still up). 
