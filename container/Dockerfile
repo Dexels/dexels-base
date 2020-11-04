@@ -1,6 +1,6 @@
 ARG DEXELS_BASE_COMMIT=unknown
 ARG DEXELS_BASE_REMOTE=unknown
-FROM openjdk:11
+FROM openjdk:13
 MAINTAINER Frank Lyaruu
 RUN yum -y update && yum install -y vim less net-tools git telnet && \
     mkdir /home/navajouser && groupadd -r navajouser -g 433 && \
