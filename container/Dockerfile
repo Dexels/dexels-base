@@ -1,7 +1,7 @@
 ARG DEXELS_BASE_COMMIT=unknown
 ARG DEXELS_BASE_REMOTE=unknown
-FROM openjdk:13
-MAINTAINER Frank Lyaruu
+
+FROM openjdk:11
 RUN yum -y update && yum install -y vim less net-tools git telnet && \
     mkdir /home/navajouser && groupadd -r navajouser -g 433 && \
     useradd -u 431 -r -g navajouser -d /home/navajouser -s /sbin/nologin -c "Docker image user" navajouser && \
@@ -25,3 +25,4 @@ ENV FELIX_OPTS="-Dorg.eclipse.jetty.server.Request.maxFormContentSize=3000000 -D
 
 USER navajouser
 ENTRYPOINT ["/opt/felix/startup.sh"]
+
