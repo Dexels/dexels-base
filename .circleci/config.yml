@@ -121,8 +121,6 @@ workflows:
     - package:
         context:
         - dexels_docker_hub
-        requires:
-        - build
         filters:
           branches:
             only:
