@@ -102,12 +102,12 @@ jobs:
                 curl -X POST \
                   --header "Content-Type: application/json" \
                   --header "Circle-Token: ${CIRCLE_TOKEN}" \
-                  -d '{"branch":"${CIRCLE_BUILD}"}' \
+                  -d "{\"branch\":\"${CIRCLE_BRANCH}\"}" \
                   "https://circleci.com/api/v1.1/project/github/dexels/navajo/build"
                 # curl -X POST \
                 #   --header "Content-Type: application/json" \
                 #   --header "Circle-Token: ${CIRCLE_TOKEN}" \
-                #   -d '{"branch":"${CIRCLE_BUILD}"}' \
+                #   -d "{\"branch\":\"${CIRCLE_BRANCH}\"}" \
                 #   "https://circleci.com/api/v1.1/project/github/dexels/navajo-streams/build"
 
 workflows:
