@@ -87,23 +87,28 @@ jobs:
             IMAGE=dexels/dexels-base
             docker build --build-arg DEXELS_BASE_COMMIT=${GIT_COMMIT} --build-arg DEXELS_BASE_REMOTE=${GIT_REMOTE} -t ${IMAGE}:$TAG temp
             docker push ${IMAGE}:$TAG
-            [[ $CIRCLE_BRANCH = "master" ]] && docker tag ${IMAGE}:$TAG ${IMAGE}:latest
-            [[ $CIRCLE_BRANCH = "master" ]] && docker push ${IMAGE}:latest
+            if [ $CIRCLE_BRANCH = "master" ]; then
+              docker tag ${IMAGE}:$TAG ${IMAGE}:latest
+              docker push ${IMAGE}:latest
+            fi
 
-
-      - run:
-          name: Trigger navajo CircleCI build
-          command: |
-            [[ $CIRCLE_BRANCH = "master" ]] && curl -X POST \
-              --header "Content-Type: application/json" \
-              --header "Circle-Token: ${CIRCLE_TOKEN}" \
-              -d '{"branch":"${CIRCLE_BUILD}"}' \
-              "https://circleci.com/api/v1.1/project/github/dexels/navajo/build"
-            # curl -X POST \
-            #   --header "Content-Type: application/json" \
-            #   --header "Circle-Token: ${CIRCLE_TOKEN}" \
-            #   -d '{"branch":"${CIRCLE_BUILD}"}' \
-            #   "https://circleci.com/api/v1.1/project/github/dexels/navajo-streams/build"
+      - when:
+          condition:
+            equal: [ master, << pipeline.git.branch >> ]
+          steps:
+          - run:
+              name: Trigger navajo CircleCI build
+              command: |
+                curl -X POST \
+                  --header "Content-Type: application/json" \
+                  --header "Circle-Token: ${CIRCLE_TOKEN}" \
+                  -d '{"branch":"${CIRCLE_BUILD}"}' \
+                  "https://circleci.com/api/v1.1/project/github/dexels/navajo/build"
+                # curl -X POST \
+                #   --header "Content-Type: application/json" \
+                #   --header "Circle-Token: ${CIRCLE_TOKEN}" \
+                #   -d '{"branch":"${CIRCLE_BUILD}"}' \
+                #   "https://circleci.com/api/v1.1/project/github/dexels/navajo-streams/build"
 
 workflows:
   version: 2
