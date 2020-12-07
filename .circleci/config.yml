@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   targetplatform:
     docker:
@@ -25,14 +25,16 @@ jobs:
       - run:
           name: Upload(scp) thirdparty P2 Environment to repo.dexels.com
           command: |
-            ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}/"
-            scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}
+            SUFFIX=`[[ $CIRCLE_BRANCH = "master" ]] && echo "" || echo "-$CIRCLE_BRANCH"`
+            echo "Using Suffix $SUFFIX"
+            ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
+            scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}
       - save_cache:
           paths:
             - ~/.m2
           key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
-  build:
+  package:
     docker:
       - image: circleci/openjdk:11-jdk
         auth:
@@ -60,48 +62,51 @@ jobs:
           paths:
             - ~/.m2
           key: maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - temp
-            - targetplatform
-            - .git
 
-  package:
-    machine:
-      image: circleci/classic:edge
-    steps:
-      - attach_workspace:
-          at: ~/repo
+      # See https://circleci.com/docs/2.0/building-docker-images/
+      - setup_remote_docker:
+          version: 19.03.13
+
       - run:
-          name: Set Docker credentials
+          name: Log in with docker registries
           command: |
             docker --version
-            echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
+            echo $DOCKERHUB_PASS | docker login --username $DOCKERHUB_USER --password-stdin
 
       - run:
           name: Docker build and push dexels-base image
           command: |
-            TAG=${MINORTAG}.$CIRCLE_BUILD_NUM
+            TAGSUFFIX=`[[ $CIRCLE_BRANCH = "master" ]] && echo "" || echo "-${CIRCLE_BRANCH}"`
+            TAG=${MINORTAG}.${CIRCLE_BUILD_NUM}${TAGSUFFIX}
             echo "Building tag: $TAG"
             cd ~/repo
             ls -l
             export GIT_REMOTE=$(git config --get remote.origin.url)
             export GIT_COMMIT=$(git rev-parse HEAD)
             echo "Adding remote: ${GIT_REMOTE} and commit: ${GIT_COMMIT}"
-            docker build --build-arg DEXELS_BASE_COMMIT=${GIT_COMMIT} --build-arg DEXELS_BASE_REMOTE=${GIT_REMOTE} -t dexels/dexels-base:$TAG -t dexels/dexels-base:latest temp
-            docker push dexels/dexels-base:$TAG
-            docker push dexels/dexels-base:latest
+            IMAGE=dexels/dexels-base
+            docker build --build-arg DEXELS_BASE_COMMIT=${GIT_COMMIT} --build-arg DEXELS_BASE_REMOTE=${GIT_REMOTE} -t ${IMAGE}:$TAG temp
+            docker push ${IMAGE}:$TAG
+            if [ $CIRCLE_BRANCH = "master" ]; then
+              docker tag ${IMAGE}:$TAG ${IMAGE}:latest
+              docker push ${IMAGE}:latest
+            fi
 
       - run:
           name: Trigger navajo CircleCI build
           command: |
-            curl -X POST \
-              --header "Content-Type: application/json" \
-              --header "Circle-Token: ${CIRCLE_TOKEN}" \
-              -d '{"branch":"master"}' \
-              "https://circleci.com/api/v1.1/project/github/dexels/navajo/build"
-            # curl -X POST --header "Content-Type: application/json" -d '{"branch":"master"}' "https://circleci.com/api/v1.1/project/github/dexels/navajo-streams/build?circle-token=${CIRCLE_TOKEN}"
+            if [ $CIRCLE_BRANCH = "master" ]; then
+              curl -X POST \
+                --header "Content-Type: application/json" \
+                --header "Circle-Token: ${CIRCLE_TOKEN}" \
+                -d "{\"branch\":\"${CIRCLE_BRANCH}\"}" \
+                "https://circleci.com/api/v1.1/project/github/dexels/navajo/build"
+            fi
+            # curl -X POST \
+            #   --header "Content-Type: application/json" \
+            #   --header "Circle-Token: ${CIRCLE_TOKEN}" \
+            #   -d "{\"branch\":\"${CIRCLE_BRANCH}\"}" \
+            #   "https://circleci.com/api/v1.1/project/github/dexels/navajo-streams/build"
 
 workflows:
   version: 2
@@ -110,11 +115,17 @@ workflows:
     - targetplatform:
         context:
         - dexels_docker_hub
-    - build:
-        context:
-        - dexels_docker_hub
+        filters:
+          branches:
+            only:
+            - master
+            - test
+
     - package:
         context:
         - dexels_docker_hub
-        requires:
-        - build
+        filters:
+          branches:
+            only:
+            - master
+            - test
