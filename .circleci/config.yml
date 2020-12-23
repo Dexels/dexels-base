@@ -93,15 +93,34 @@ jobs:
             fi
 
       - run:
-          name: Trigger navajo CircleCI build
+          name: Update navajo dependency on dexels-base to latest dexels-base build version (Triggers CI build on navajo)
           command: |
-            if [ $CIRCLE_BRANCH = "master" ]; then
-              curl -X POST \
-                --header "Content-Type: application/json" \
-                --header "Circle-Token: ${CIRCLE_TOKEN}" \
-                -d "{\"branch\":\"${CIRCLE_BRANCH}\"}" \
-                "https://circleci.com/api/v1.1/project/github/dexels/navajo/build"
-            fi
+            mkdir ~/navajocheckout
+            cd  ~/navajocheckout
+            git clone https://${GITHUB_PERSONAL_TOKEN}@github.com/Dexels/navajo.git -b ${CIRCLE_BRANCH} --depth 1
+            ls -l
+            cd navajo/setup/com.dexels.navajo.target
+            BRANCH=${CIRCLE_BRANCH} ./updateversion.sh
+            # Push changes
+            git config credential.helper 'cache --timeout=120'
+            git config user.email "Dexels Butler"
+            git config user.name "butler@dexels.com"
+            git add .
+            echo "commiting changes"
+            git commit --allow-empty -m "Update via CircleCI"
+            git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/Dexels/navajo.git ${CIRCLE_BRANCH}
+            echo "push complete"
+
+      # - run:
+      #     name: Trigger navajo CircleCI build
+      #     command: |
+            # if [ $CIRCLE_BRANCH = "master" ]; then
+            #   curl -X POST \
+            #     --header "Content-Type: application/json" \
+            #     --header "Circle-Token: ${CIRCLE_TOKEN}" \
+            #     -d "{\"branch\":\"${CIRCLE_BRANCH}\"}" \
+            #     "https://circleci.com/api/v1.1/project/github/dexels/navajo/build"
+            # fi
             # curl -X POST \
             #   --header "Content-Type: application/json" \
             #   --header "Circle-Token: ${CIRCLE_TOKEN}" \
