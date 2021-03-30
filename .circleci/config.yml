@@ -34,6 +34,25 @@ jobs:
             - ~/.m2
           key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
+      - run:
+          name: Update navajo dependency on dexels-base to latest dexels-base build version (Triggers CI build on navajo)
+          command: |
+            mkdir ~/navajocheckout
+            cd  ~/navajocheckout
+            git clone https://${GITHUB_PERSONAL_TOKEN}@github.com/Dexels/navajo.git -b ${CIRCLE_BRANCH} --depth 1
+            ls -l
+            cd navajo/setup/com.dexels.navajo.target
+            BRANCH="${CIRCLE_BRANCH}"  DEXELS_BASE_BUILD="{CIRCLE_BUILD_NUM}"  ./updateversion.sh
+            # Push changes
+            git config credential.helper 'cache --timeout=120'
+            git config user.email "Dexels Butler"
+            git config user.name "butler@dexels.com"
+            git add .
+            echo "commiting changes"
+            git commit --allow-empty -m "Update via CircleCI"
+            git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/Dexels/navajo.git ${CIRCLE_BRANCH}
+            echo "push complete"
+
   package:
     docker:
       - image: circleci/openjdk:11-jdk
@@ -91,25 +110,6 @@ jobs:
               docker tag ${IMAGE}:$TAG ${IMAGE}:latest
               docker push ${IMAGE}:latest
             fi
-
-      - run:
-          name: Update navajo dependency on dexels-base to latest dexels-base build version (Triggers CI build on navajo)
-          command: |
-            mkdir ~/navajocheckout
-            cd  ~/navajocheckout
-            git clone https://${GITHUB_PERSONAL_TOKEN}@github.com/Dexels/navajo.git -b ${CIRCLE_BRANCH} --depth 1
-            ls -l
-            cd navajo/setup/com.dexels.navajo.target
-            BRANCH=${CIRCLE_BRANCH} ./updateversion.sh
-            # Push changes
-            git config credential.helper 'cache --timeout=120'
-            git config user.email "Dexels Butler"
-            git config user.name "butler@dexels.com"
-            git add .
-            echo "commiting changes"
-            git commit --allow-empty -m "Update via CircleCI"
-            git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/Dexels/navajo.git ${CIRCLE_BRANCH}
-            echo "push complete"
 
       # - run:
       #     name: Trigger navajo CircleCI build
