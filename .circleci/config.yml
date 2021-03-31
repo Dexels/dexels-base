@@ -139,6 +139,7 @@ workflows:
             only:
             - master
             - test
+            - sendratosports
 
     - package:
         context:
@@ -148,3 +149,4 @@ workflows:
             only:
             - master
             - test
+            - sendratosports
