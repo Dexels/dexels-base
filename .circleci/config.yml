@@ -1,30 +1,30 @@
-version:               2.1
+version: 2.1
 jobs:
   targetplatform:
     docker:
-      - image:         circleci/openjdk:11-jdk
+      - image: circleci/openjdk:11-jdk
         auth:
-          username:    $DOCKERHUB_USER
-          password:    $DOCKERHUB_PASS
+          username: $DOCKERHUB_USER
+          password: $DOCKERHUB_PASS
     working_directory: ~/repo
     environment:
-      JVM_OPTS:        -Xmx1000m
-      TERM:            dumb
+      JVM_OPTS: -Xmx1000m
+      TERM: dumb
     steps:
       - checkout
       - restore_cache:
           keys:
             - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - run:
-          name:        Run Ant createtargetplatform
-          command:     |
+          name: Run Ant createtargetplatform
+          command: |
             ant targetplatform -Dversion="${MINORTAG}.${CIRCLE_BUILD_NUM}"
             cd targetplatform
             mvn -s "../.circleci/conf/settings.xml" install -B -U -ff
             cd ..
       - run:
-          name:        Upload(scp) thirdparty P2 Environment to repo.dexels.com
-          command:     |
+          name: Upload(scp) thirdparty P2 Environment to repo.dexels.com
+          command: |
             SUFFIX=`[[ $CIRCLE_BRANCH = "master" ]] && echo "" || echo "-$CIRCLE_BRANCH"`
             echo "Using Suffix $SUFFIX"
             ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
@@ -32,7 +32,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-          key:         maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+          key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
       - run:
           name: Update navajo dependency on dexels-base to latest dexels-base build version (Triggers CI build on navajo)
@@ -55,14 +55,14 @@ jobs:
 
   package:
     docker:
-      - image:         circleci/openjdk:11-jdk
+      - image: circleci/openjdk:11-jdk
         auth:
-          username:    $DOCKERHUB_USER
-          password:    $DOCKERHUB_PASS
+          username: $DOCKERHUB_USER
+          password: $DOCKERHUB_PASS
     working_directory: ~/repo
     environment:
-      JVM_OPTS:        -Xmx1000m
-      TERM:            dumb
+      JVM_OPTS: -Xmx1000m
+      TERM: dumb
     steps:
       - checkout
       - restore_cache:
@@ -70,31 +70,31 @@ jobs:
             - maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
       - run:
           # TODO cleanup antfiles remove all unneeded targets
-          name:        Runt Ant alldistros (dockersetup)
-          command:     |
+          name: Runt Ant alldistros (dockersetup)
+          command: |
             ant alldistros -Ddocker=false -Dupload=false -Dbundles=core.cfg -Dversion=${MINORTAG}.${CIRCLE_BUILD_NUM} -debug
             ls -l target
       - store_artifacts:
-          path:        ~/repo/target/dexels-base.tar.gz
+          path: ~/repo/target/dexels-base.tar.gz
           destination: dexels-base.tgz
       - save_cache:
           paths:
             - ~/.m2
-          key:         maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+          key: maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
       # See https://circleci.com/docs/2.0/building-docker-images/
       - setup_remote_docker:
-          version:     19.03.13
+          version: 19.03.13
 
       - run:
-          name:        Log in with docker registries
-          command:     |
+          name: Log in with docker registries
+          command: |
             docker --version
             echo $DOCKERHUB_PASS | docker login --username $DOCKERHUB_USER --password-stdin
 
       - run:
-          name:        Docker build and push dexels-base image
-          command:     |
+          name: Docker build and push dexels-base image
+          command: |
             TAGSUFFIX=`[[ $CIRCLE_BRANCH = "master" ]] && echo "" || echo "-${CIRCLE_BRANCH}"`
             TAG=${MINORTAG}.${CIRCLE_BUILD_NUM}${TAGSUFFIX}
             echo "Building tag: $TAG"
@@ -112,8 +112,8 @@ jobs:
             fi
 
       # - run:
-      #     name:      Trigger navajo CircleCI build
-      #     command:   |
+      #     name: Trigger navajo CircleCI build
+      #     command: |
             # if [ $CIRCLE_BRANCH = "master" ]; then
             #   curl -X POST \
             #     --header "Content-Type: application/json" \
@@ -128,7 +128,7 @@ jobs:
             #   "https://circleci.com/api/v1.1/project/github/dexels/navajo-streams/build"
 
 workflows:
-  version:             2
+  version: 2
   workflow:
     jobs:
     - targetplatform:
