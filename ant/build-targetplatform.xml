@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project
     xmlns:artifact="antlib:org.apache.maven.artifact.ant"
-	name="deploy target platform"
-	default="uploadtargetplatform"
-	basedir=".">
-	
+    name="deploy target platform"
+    default="uploadtargetplatform"
+    basedir=".">
+
     <path id="navajo-ant-tasks.classpath" path="ant/lib/com.dexels.navajo.dev.ant-1.1.0-SNAPSHOT.jar" />
 
-	<path id="build.classpath">
+    <path id="build.classpath">
         <fileset dir="ant/lib">
             <include name="**/*.jar" />
         </fileset>
     </path>
 
     <taskdef name="createp2" classname="com.dexels.navajo.dev.ant.CreateP2RepoPom"
-    	classpathref="navajo-ant-tasks.classpath" />
+        classpathref="navajo-ant-tasks.classpath" />
 
     <condition property="upload">
         <istrue value="${upload}"/>
@@ -24,23 +24,23 @@
         <delete dir="targetplatform"/>
         <mkdir dir="targetplatform"/>
         <createp2
-        	groups="${groups}"
-        	transitive="false"
-        	id="dexels-navajo-target"
-        	version="${feature_version}"
-        	bundles="oao.cfg,sendrato.cfg,appstore.cfg,targetplatform.cfg,container.cfg,core.cfg"
-        	template="ant/pom-create-targetplatform-template.xml"
-        	destination="targetplatform/pom.xml" />
+            groups="${groups}"
+            transitive="false"
+            id="dexels-navajo-target"
+            version="${feature_version}"
+            bundles="oao.cfg,sendrato.cfg,appstore.cfg,targetplatform.cfg,container.cfg,core.cfg"
+            template="ant/pom-create-targetplatform-template.xml"
+            destination="targetplatform/pom.xml" />
     </target>
 
-	<target name="runmaventargetplatform" depends="createtargetplatform">
+    <target name="runmaventargetplatform" depends="createtargetplatform">
         <exec dir="targetplatform" executable="mvn">
             <arg value="install"/>
             <arg value="-B"/>
         </exec>
     </target>
 
-	<target name="uploadtargetplatform" if="upload" depends="runmaventargetplatform">
+    <target name="uploadtargetplatform" if="upload" depends="runmaventargetplatform">
         <property name="user" value="navajo"/>
         <property name="host" value="repo.dexels.com"/>
         <property name="feature_version" value="${feature_version}"/>
@@ -49,10 +49,10 @@
         <property name="dest" value="${user}@${host}:/var/www/html/repo/eclipse/3rdparty_${feature_version}/"/>
         <echo message="cd ${basedir}/targetplatform &amp;&amp; scp -r . ${dest}"/>
         <sshexec knownhosts="${user.home}/.ssh/known_hosts" host="${host}" trust="true"
-        	username="${user}" keyfile="${user.home}/.ssh/id_rsa"
-        	command="mkdir -p /var/www/html/repo/eclipse/3rdparty_${feature_version}/"/>
+            username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+            command="mkdir -p /var/www/html/repo/eclipse/3rdparty_${feature_version}/"/>
         <scp trust="true" knownhosts="${user.home}/.ssh/known_hosts" verbose="TRUE" todir="${dest}"
-        	keyfile="${user.home}/.ssh/id_rsa">
+            keyfile="${user.home}/.ssh/id_rsa">
             <fileset dir="targetplatform/target/repository">
                 <include name="**/*"/>
             </fileset>
