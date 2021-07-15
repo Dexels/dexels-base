@@ -2,20 +2,20 @@
 <project
     xmlns:artifact="antlib:org.apache.maven.artifact.ant"
     name="distros"
-	default="alldistros"
-	basedir=".">
+    default="alldistros"
+    basedir=".">
 
     <import file="ant/build-targetplatform.xml" />
     <import file="ant/build-alldistros.xml" />
 
-	<target name="targetplatform">
+    <target name="targetplatform">
         <antcall target="createtargetplatform">
             <param name="groups" value="dependency" />
             <param name="feature_version" value="${version}" />
         </antcall>
     </target>
 
-	<target name="alldistros">
+    <target name="alldistros">
         <antcall target="dockersetup">
             <param name="groups" value="" />
             <param name="distro" value="dexels-base" />
