@@ -40,10 +40,10 @@
         <delete dir="temp"/>
         <mkdir dir="temp"/>
         <appendpom
-        	groups="${groups}"
-        	bundles="core.cfg,container.cfg"
-        	template="ant/pom-template.xml"
-        	destination="temp/pom.xml" />
+            groups="${groups}"
+            bundles="core.cfg,container.cfg"
+            template="ant/pom-template.xml"
+            destination="temp/pom.xml" />
     </target>
 
     <target name="runmaven" depends="createmaven">
@@ -59,7 +59,7 @@
     <target name="unpackfelix" depends="runmaven">
         <mkdir dir="temp/unpack"/>
         <untar dest="temp/unpack" compression="gzip"
-        	src="${user.home}/.m2/repository/org/apache/felix/org.apache.felix.main.distribution/${felix.version}/org.apache.felix.main.distribution-${felix.version}.tar.gz">
+            src="${user.home}/.m2/repository/org/apache/felix/org.apache.felix.main.distribution/${felix.version}/org.apache.felix.main.distribution-${felix.version}.tar.gz">
         </untar>
         <move todir="temp/unpack/felix">
             <fileset dir="temp/unpack/felix-framework-${felix.version.clean}"/>
@@ -101,7 +101,7 @@
         </tar>
     </target>
 
-	<target name="mavendeploy" depends="gzip" if="upload">
+    <target name="mavendeploy" depends="gzip" if="upload">
         <exec dir="target" executable="mvn">
             <arg value="deploy:deploy-file"/>
             <arg value="-DrepositoryId=dexels"/>
@@ -115,7 +115,7 @@
         </exec>
     </target>
 
-	<target name="dockersetup" depends="mavendeploy">
+    <target name="dockersetup" depends="mavendeploy">
         <mkdir dir="temp/container"/>
         <copy todir="temp/" file="container/Dockerfile"/>
         <copy todir="temp/">
@@ -126,7 +126,7 @@
         <echo message="docker build -t dexels/${distro}:${version} ."/>
     </target>
 
-	<target name="docker" depends="dockersetup" if="docker">
+    <target name="docker" depends="dockersetup" if="docker">
         <exec dir="temp" executable="docker">
             <arg value="build"/>
             <arg value="-t"/>
@@ -135,7 +135,7 @@
         </exec>
     </target>
 
-	<target name="dockerpush" depends="docker" if="dockerpush">
+    <target name="dockerpush" depends="docker" if="dockerpush">
         <echo message="docker push dexels/${distro}:${version}"/>
         <exec dir="temp" executable="docker">
             <arg value="push"/>
