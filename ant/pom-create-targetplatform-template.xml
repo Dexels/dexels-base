@@ -1,16 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                        http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.sparsick.tycho</groupId>
+    <groupId>com.dexels.base.tycho</groupId>
     <artifactId>p2-repository-from-maven-artifacts</artifactId>
     <version>2.0.0-SNAPSHOT</version>
-
     <packaging>pom</packaging>
 
     <properties>
-        <tycho.version>1.4.0</tycho.version>
+        <tycho.version>1.7.0</tycho.version>
     </properties>
 
     <build>
@@ -28,7 +30,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
                         </goals>
                         <configuration>
                             <featureDefinitions>
-                                <feature>                                    <!-- Generate a feature including artifacts that are listed below inside the feature element-->
+                                <feature>                                    <!-- Generate a feature including artifacts that are listed below inside the feature element -->
                                     <id>spring.feature</id>
                                     <version>4.3.11</version>
                                     <label>Navajo Target Platform</label>
@@ -44,15 +46,16 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
                                 <!-- specify your depencies here -->
                                 <!-- groupId:artifactId:version -->
                                 <artifact>
-                                    <id>com.google.guava:guava:jar:23.0</id>                                    <!-- Artifact with existing OSGi-Manifest-->
-                                    <!--<transitive>false</transitive>-->
-                                    <!--<source>true</source>-->
+                                    <id>com.google.guava:guava:jar:23.0</id>                                    <!-- Artifact with existing OSGi-Manifest -->
+                                    <!--<transitive>false</transitive> -->
+                                    <!--<source>true</source> -->
                                 </artifact>
                             </artifacts>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-p2-repository-plugin</artifactId>
@@ -67,8 +70,8 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
                 </executions>
             </plugin>
 
-            <!-- Attach zipped P2 repository to be installed and deployed
-                in the Maven repository during the deploy phase. -->
+            <!-- Attach zipped P2 repository to be installed and deployed in the Maven repository during 
+                the deploy phase. -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -89,11 +92,10 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
-    <repositories>
 
+    <repositories>
         <repository>
             <releases>
                 <enabled>true</enabled>
@@ -119,6 +121,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             <url>https://repo.dexels.com/repository/thirdparty/</url>
             <layout>default</layout>
         </repository>
+
         <repository>
             <releases>
                 <enabled>true</enabled>
@@ -131,7 +134,5 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             <url>https://repo.maven.apache.org/maven2/</url>
             <layout>default</layout>
         </repository>
-
-
     </repositories>
 </project>
