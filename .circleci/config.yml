@@ -50,7 +50,7 @@ jobs:
             git add .
             echo "commiting changes"
             git commit --allow-empty -m "Update via CircleCI"
-            git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/Dexels/navajo.git ${CIRCLE_BRANCH}
+            git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/Dexels/navajo.git main
             echo "push complete"
 
   package:
