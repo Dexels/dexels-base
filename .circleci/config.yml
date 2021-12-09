@@ -111,22 +111,6 @@ jobs:
               docker push ${IMAGE}:latest
             fi
 
-      # - run:
-      #     name: Trigger navajo CircleCI build
-      #     command: |
-            # if [ $CIRCLE_BRANCH = "master" ]; then
-            #   curl -X POST \
-            #     --header "Content-Type: application/json" \
-            #     --header "Circle-Token: ${CIRCLE_TOKEN}" \
-            #     -d "{\"branch\":\"${CIRCLE_BRANCH}\"}" \
-            #     "https://circleci.com/api/v1.1/project/github/dexels/navajo/build"
-            # fi
-            # curl -X POST \
-            #   --header "Content-Type: application/json" \
-            #   --header "Circle-Token: ${CIRCLE_TOKEN}" \
-            #   -d "{\"branch\":\"${CIRCLE_BRANCH}\"}" \
-            #   "https://circleci.com/api/v1.1/project/github/dexels/navajo-streams/build"
-
 workflows:
   version: 2
   main:
@@ -139,6 +123,7 @@ workflows:
             only:
             - master
             - test
+            - sendrato
             - sendratosports
 
     - package:
@@ -149,4 +134,6 @@ workflows:
             only:
             - master
             - test
+            - sendrato
             - sendratosports
+
