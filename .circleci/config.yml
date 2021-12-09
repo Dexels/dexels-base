@@ -42,13 +42,13 @@ jobs:
             git clone https://${GITHUB_PERSONAL_TOKEN}@github.com/Sendrato/navajo.git -b main --depth 1
             ls -l
             cd navajo/setup/com.dexels.navajo.target
-            BRANCH="${CIRCLE_BRANCH}"  DEXELS_BASE_BUILD="${CIRCLE_BUILD_NUM}"  ./updateversion.sh
+            DEXELS_BASE_BRANCH="${CIRCLE_BRANCH}"  DEXELS_BASE_BUILD="${CIRCLE_BUILD_NUM}"  ./updateversion.sh
             # Push changes
             git config credential.helper 'cache --timeout=120'
             git config user.email "Dexels Butler"
             git config user.name "butler@dexels.com"
             git add .
-            echo "commiting changes"
+            echo "committing changes"
             git commit --allow-empty -m "Update via CircleCI"
             git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/Sendrato/navajo.git main
             echo "push complete"
