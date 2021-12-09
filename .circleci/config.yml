@@ -39,7 +39,7 @@ jobs:
           command: |
             mkdir ~/navajocheckout
             cd  ~/navajocheckout
-            git clone https://${GITHUB_PERSONAL_TOKEN}@github.com/Sendrato/navajo.git -b ${CIRCLE_BRANCH} --depth 1
+            git clone https://${GITHUB_PERSONAL_TOKEN}@github.com/Sendrato/navajo.git -b main --depth 1
             ls -l
             cd navajo/setup/com.dexels.navajo.target
             BRANCH="${CIRCLE_BRANCH}"  DEXELS_BASE_BUILD="${CIRCLE_BUILD_NUM}"  ./updateversion.sh
