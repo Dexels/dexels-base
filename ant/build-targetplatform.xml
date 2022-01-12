@@ -28,7 +28,7 @@
             transitive="false"
             id="dexels-navajo-target"
             version="${feature_version}"
-            bundles="oao.cfg,sendrato.cfg,appstore.cfg,targetplatform.cfg,container.cfg,core.cfg"
+            bundles="oao.cfg,sendrato.cfg,appstore.cfg,targetplatform.cfg,core.cfg"
             template="ant/pom-create-targetplatform-template.xml"
             destination="targetplatform/pom.xml" />
     </target>

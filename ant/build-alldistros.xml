@@ -41,7 +41,7 @@
         <mkdir dir="temp"/>
         <appendpom
             groups="${groups}"
-            bundles="core.cfg,container.cfg"
+            bundles="core.cfg"
             template="ant/pom-template.xml"
             destination="temp/pom.xml" />
     </target>
