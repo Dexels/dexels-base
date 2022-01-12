@@ -74,6 +74,7 @@ jobs:
           command: |
             ant alldistros -Ddocker=false -Dupload=false -Dbundles=core.cfg -Dversion=${MINORTAG}.${CIRCLE_BUILD_NUM} -debug
             ls -l target
+            ls -1 temp/target/navajo-osgi-release-3.0.0-SNAPSHOT/WEB-INF/lib
       - store_artifacts:
           path: ~/repo/target/dexels-base.tar.gz
           destination: dexels-base.tgz
