@@ -68,6 +68,7 @@
 
     <target name="createdistro" depends="unpackfelix">
         <echo message="Bundles: ${bundles}"/>
+        <echo message="Groups: ${groups}"/>
         <copydeps destination="temp/unpack/felix/bundle" bundles="core.cfg" groups="${groups}"/>
     </target>
 
