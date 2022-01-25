@@ -25,7 +25,7 @@ jobs:
       - run:
           name: Upload(scp) thirdparty P2 Environment to repo.dexels.com
           command: |
-            SUFFIX=`[[ $CIRCLE_BRANCH = "master" ]] && echo "" || echo "-$CIRCLE_BRANCH"`
+            SUFFIX=`[[ $CIRCLE_BRANCH = "main" ]] && echo "" || echo "-$CIRCLE_BRANCH"`
             echo "Using Suffix $SUFFIX"
             ssh -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
             scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}
@@ -95,7 +95,7 @@ jobs:
       - run:
           name: Docker build and push dexels-base image
           command: |
-            TAGSUFFIX=`[[ $CIRCLE_BRANCH = "master" ]] && echo "" || echo "-${CIRCLE_BRANCH}"`
+            TAGSUFFIX=`[[ $CIRCLE_BRANCH = "main" ]] && echo "" || echo "-${CIRCLE_BRANCH}"`
             TAG=${MINORTAG}.${CIRCLE_BUILD_NUM}${TAGSUFFIX}
             echo "Building tag: $TAG"
             cd ~/repo
@@ -106,7 +106,7 @@ jobs:
             IMAGE=dexels/dexels-base
             docker build --build-arg DEXELS_BASE_COMMIT=${GIT_COMMIT} --build-arg DEXELS_BASE_REMOTE=${GIT_REMOTE} -t ${IMAGE}:$TAG temp
             docker push ${IMAGE}:$TAG
-            if [ $CIRCLE_BRANCH = "master" ]; then
+            if [ $CIRCLE_BRANCH = "main" ]; then
               docker tag ${IMAGE}:$TAG ${IMAGE}:latest
               docker push ${IMAGE}:latest
             fi
@@ -121,10 +121,8 @@ workflows:
         filters:
           branches:
             only:
-            - master
+            - main
             - test
-            - sendrato
-            - sendratosports
 
     - package:
         context:
@@ -132,8 +130,6 @@ workflows:
         filters:
           branches:
             only:
-            - master
+            - main
             - test
-            - sendrato
-            - sendratosports
 
