@@ -4,7 +4,7 @@ startflags="--add-modules java.se "
 startflags+="--add-opens java.base/java.net=ALL-UNNAMED "
 
 
-VERSION="3.3.852-test"
+VERSION="3.3.860-sendratosports"
 CONTAINER="dexels-base-$VERSION"
 
 
