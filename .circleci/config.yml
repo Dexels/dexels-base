@@ -11,9 +11,6 @@ jobs:
       JVM_OPTS: -Xmx1000m
       TERM: dumb
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "fa:e0:d5:9a:f6:ad:7a:21:eb:ec:c4:62:c0:df:d8:03"
       - checkout
       - restore_cache:
           keys:
