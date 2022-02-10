@@ -27,8 +27,8 @@ jobs:
           command: |
             SUFFIX=`[[ $CIRCLE_BRANCH = "main" ]] && echo "" || echo "-$CIRCLE_BRANCH"`
             echo "Using Suffix $SUFFIX"
-            ssh -vvv -o StrictHostKeyChecking=no navajo@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
-            scp -r targetplatform/target/repository/* navajo@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}
+            ssh -vvv -o StrictHostKeyChecking=no dexelsbutler@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
+            scp -r targetplatform/target/repository/* dexelsbutler@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}
       - save_cache:
           paths:
             - ~/.m2
