@@ -30,15 +30,7 @@ jobs:
           command: |
             SUFFIX=`[[ $CIRCLE_BRANCH = "main" ]] && echo "" || echo "-$CIRCLE_BRANCH"`
             echo "Using Suffix $SUFFIX"
-            ls -l ~/.ssh
-            cat ~/.ssh/id_rsa
-            echo "Public key:"
-            cat ~/.ssh/id_rsa.pub
-            echo "Config file:"
-            cat ~/.ssh/config
-            echo "Alternative key:"
-            cat ~/.ssh/id_rsa_*
-            ssh -vvv -o StrictHostKeyChecking=no dexelsbutler@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
+            ssh -o StrictHostKeyChecking=no dexelsbutler@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
             scp -r targetplatform/target/repository/* dexelsbutler@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}
       - save_cache:
           paths:
