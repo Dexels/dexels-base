@@ -5,8 +5,8 @@
     default="dockerpush"
     basedir=".">
 
-    <property name="felix.version">7.0.0</property>
-    <property name="felix.version.clean">7.0.0</property>
+    <property name="felix.version">7.0.5</property>
+    <property name="felix.version.clean">7.0.5</property>
 
     <path id="navajo-ant-tasks.classpath" path="ant/lib/com.dexels.navajo.dev.ant-1.1.0-SNAPSHOT.jar" />
 
