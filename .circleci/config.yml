@@ -83,8 +83,7 @@ jobs:
           key: maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
       # See https://circleci.com/docs/2.0/building-docker-images/
-      - setup_remote_docker:
-
+      - setup_remote_docker
       - run:
           name: Log in with docker registries
           command: |
