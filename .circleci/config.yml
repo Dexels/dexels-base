@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   db_targetplatform:
     docker:
-      - image: circleci/openjdk:11-jdk
+      - image: circleci/openjdk:17-jdk
         auth:
           username: $DOCKERHUB_USER
           password: $DOCKERHUB_PASS
@@ -55,7 +55,7 @@ jobs:
 
   db_docker:
     docker:
-      - image: circleci/openjdk:11-jdk
+      - image: circleci/openjdk:17-jdk
         auth:
           username: $DOCKERHUB_USER
           password: $DOCKERHUB_PASS
