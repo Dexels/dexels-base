@@ -22,9 +22,9 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install -y wget
-            wget https://downloads.apache.org/ant/binaries/apache-ant-1.10.13-bin.tar.gz
-            sudo tar -xzf apache-ant-1.10.13-bin.tar.gz -C /opt/
-            export ANT_HOME=/opt/apache-ant-1.10.13
+            wget https://downloads.apache.org/ant/binaries/apache-ant-1.10.15-bin.tar.gz
+            sudo tar -xzf apache-ant-1.10.15-bin.tar.gz -C /opt/
+            export ANT_HOME=/opt/apache-ant-1.10.15
             export PATH=$ANT_HOME/bin:$PATH
 
       # Verify Ant and Java versions
