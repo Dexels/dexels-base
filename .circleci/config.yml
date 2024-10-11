@@ -16,17 +16,23 @@ jobs:
           keys:
             - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
-      # Install Ant
+      # Install Ant manually from Apache
       - run:
-          name: Install Ant
+          name: Install Ant manually
           command: |
             sudo apt-get update
-            sudo apt-get install -y ant
+            sudo apt-get install -y wget
+            wget https://downloads.apache.org/ant/binaries/apache-ant-1.10.13-bin.tar.gz
+            sudo tar -xzf apache-ant-1.10.13-bin.tar.gz -C /opt/
+            export ANT_HOME=/opt/apache-ant-1.10.13
+            export PATH=$ANT_HOME/bin:$PATH
 
-      # Verify Ant installation
+      # Verify Ant and Java versions
       - run:
-          name: Check Ant version
-          command: ant -version
+          name: Check Ant and Java versions
+          command: |
+            ant -version
+            java -version
 
       - run:
           name: Run Ant createtargetplatform
