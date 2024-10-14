@@ -24,15 +24,19 @@ jobs:
             sudo apt-get install -y wget
             wget https://downloads.apache.org/ant/binaries/apache-ant-1.10.15-bin.tar.gz
             sudo tar -xzf apache-ant-1.10.15-bin.tar.gz -C /opt/
+            echo "Check /opt"
+            sudo ls -CF /opt
             export ANT_HOME=/opt/apache-ant-1.10.15
             export PATH=$ANT_HOME/bin:$PATH
+            echo "PATH set to: $PATH"
+            echo "ANT_HOME set to: $ANT_HOME"
 
-      # Verify Ant and Java versions
+      # Verify Java and Ant versions
       - run:
           name: Check Ant and Java versions
           command: |
-            ant -version
             java -version
+            ant -version
 
       - run:
           name: Run Ant createtargetplatform
@@ -141,12 +145,11 @@ workflows:
             - main
             - test
 
-    - db_docker:
-        context:
-        - dexels_docker_hub
-        filters:
-          branches:
-            only:
-            - main
-            - test
-
+    # - db_docker:
+    #     context:
+    #     - dexels_docker_hub
+    #     filters:
+    #       branches:
+    #         only:
+    #         - main
+    #         - test
