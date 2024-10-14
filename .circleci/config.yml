@@ -31,8 +31,9 @@ jobs:
       # Verify Java and Ant versions
       - run:
           name: Check Ant and Java versions
+          environment:
+            PATH: /opt/ant/bin:$PATH
           command: |
-            export PATH=/opt/ant/bin:$PATH
             echo "ANT_HOME set to: $ANT_HOME"
             echo "PATH set to: $PATH"
             java -version
@@ -40,8 +41,9 @@ jobs:
 
       - run:
           name: Run Ant createtargetplatform
+          environment:
+            PATH: /opt/ant/bin:$PATH
           command: |
-            export PATH=/opt/ant/bin:$PATH
             ant targetplatform -Dversion="${MINORTAG}.${CIRCLE_BUILD_NUM}"
             cd targetplatform
             mvn -s "../.circleci/conf/settings.xml" install -B -U -ff
