@@ -28,26 +28,15 @@ jobs:
             sudo tar -xzf $ANT_VERSION-bin.tar.gz -C /opt/
             sudo ln -s $ANT_HOME /opt/ant
 
-      # Verify Java and Ant versions
-      - run:
-          name: Check Ant and Java versions
-          environment:
-            PATH: /opt/ant/bin:$PATH
-          command: |
-            echo "ANT_HOME set to: $ANT_HOME"
-            echo "PATH set to: $PATH"
-            java -version
-            ant -version
-
       - run:
           name: Run Ant createtargetplatform
-          environment:
-            PATH: /opt/ant/bin:$PATH
           command: |
+            export PATH=/opt/ant/bin:$PATH
             ant targetplatform -Dversion="${MINORTAG}.${CIRCLE_BUILD_NUM}"
             cd targetplatform
             mvn -s "../.circleci/conf/settings.xml" install -B -U -ff
             cd ..
+
       - run:
           name: Upload(scp) thirdparty P2 Environment to repo.dexels.com
           command: |
@@ -55,6 +44,7 @@ jobs:
             echo "Using Suffix $SUFFIX"
             ssh -o StrictHostKeyChecking=no dexelsbutler@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
             scp -r targetplatform/target/repository/* dexelsbutler@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}
+
       - save_cache:
           paths:
             - ~/.m2
