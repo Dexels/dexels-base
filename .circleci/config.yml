@@ -10,6 +10,8 @@ jobs:
     environment:
       JVM_OPTS: -Xmx1000m
       TERM: dumb
+      ANT_VERSION: apache-ant-1.10.15
+      ANT_HOME: /opt/apache-ant-1.10.15
     steps:
       - checkout
       - restore_cache:
@@ -38,6 +40,7 @@ jobs:
             echo "PATH set to: $PATH"
             echo "ANT_HOME set to: $ANT_HOME"
             env
+            export PATH=$ANT_HOME/bin:$PATH
             which java
             which ant
             java -version
