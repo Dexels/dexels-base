@@ -30,12 +30,13 @@ jobs:
 
             sudo tar -xzf $ANT_VERSION-bin.tar.gz -C /opt/
             sudo ln -s $ANT_HOME /opt/ant
+            sudo ln -sfn /opt/ant/bin/ant /usr/bin/ant
+
+            rm -f $ANT_VERSION-bin.tar.gz
 
       - run:
           name: Run Ant createtargetplatform
           command: |
-            export PATH=/opt/ant/bin:$PATH
-
             ant targetplatform -Dversion="${MINORTAG}.${CIRCLE_BUILD_NUM}"
 
             cd targetplatform
@@ -110,14 +111,15 @@ jobs:
             wget https://downloads.apache.org/ant/binaries/$ANT_VERSION-bin.tar.gz
 
             sudo tar -xzf $ANT_VERSION-bin.tar.gz -C /opt/
-            sudo ln -s $ANT_HOME /opt/ant
+            sudo ln -sfn $ANT_HOME /opt/ant
+            sudo ln -sfn /opt/ant/bin/ant /usr/bin/ant
+
+            rm -f $ANT_VERSION-bin.tar.gz
 
       - run:
           # TODO cleanup antfiles remove all unneeded targets
           name: Runt Ant alldistros (dockersetup)
           command: |
-            export PATH=/opt/ant/bin:$PATH
-
             ant alldistros -Ddocker=false -Dupload=false -Dbundles=core.cfg -Dversion=${MINORTAG}.${CIRCLE_BUILD_NUM} -debug
             ls -l target
 
