@@ -83,7 +83,7 @@ jobs:
 
   db_docker:
     docker:
-      - image: circleci/openjdk:17-jdk
+      - image: cimg/openjdk:17.0
         auth:
           username: $DOCKERHUB_USER
           password: $DOCKERHUB_PASS
