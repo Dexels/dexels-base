@@ -12,6 +12,7 @@ jobs:
       TERM: dumb
       ANT_VERSION: apache-ant-1.10.15
       ANT_HOME: /opt/apache-ant-1.10.15
+      PATH: $ANT_HOME/bin:$PATH
     steps:
       - checkout
       - restore_cache:
@@ -24,23 +25,17 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install -y wget
-            wget https://downloads.apache.org/ant/binaries/apache-ant-1.10.15-bin.tar.gz
-            sudo tar -xzf apache-ant-1.10.15-bin.tar.gz -C /opt/
-            echo "Check /opt"
-            sudo ls -CF /opt
-            export ANT_HOME=/opt/apache-ant-1.10.15
-            export PATH=$ANT_HOME/bin:$PATH
-            echo "PATH set to: $PATH"
-            echo "ANT_HOME set to: $ANT_HOME"
+            wget https://downloads.apache.org/ant/binaries/$ANT_VERSION-bin.tar.gz
+            sudo tar -xzf $ANT_VERSION-bin.tar.gz -C /opt/
 
       # Verify Java and Ant versions
       - run:
           name: Check Ant and Java versions
           command: |
-            echo "PATH set to: $PATH"
             echo "ANT_HOME set to: $ANT_HOME"
+            echo "PATH set to: $PATH"
             env
-            export PATH=$ANT_HOME/bin:$PATH
+            # export PATH=$ANT_HOME/bin:$PATH
             which java
             which ant
             java -version
