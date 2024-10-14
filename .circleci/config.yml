@@ -12,7 +12,6 @@ jobs:
       TERM: dumb
       ANT_VERSION: apache-ant-1.10.15
       ANT_HOME: /opt/apache-ant-1.10.15
-      PATH: $ANT_HOME/bin:$PATH
     steps:
       - checkout
       - restore_cache:
@@ -32,10 +31,10 @@ jobs:
       - run:
           name: Check Ant and Java versions
           command: |
+            export PATH=$ANT_HOME/bin:$PATH
             echo "ANT_HOME set to: $ANT_HOME"
             echo "PATH set to: $PATH"
             env
-            # export PATH=$ANT_HOME/bin:$PATH
             which java
             which ant
             java -version
