@@ -35,6 +35,11 @@ jobs:
       - run:
           name: Check Ant and Java versions
           command: |
+            echo "PATH set to: $PATH"
+            echo "ANT_HOME set to: $ANT_HOME"
+            env
+            which java
+            which ant
             java -version
             ant -version
 
