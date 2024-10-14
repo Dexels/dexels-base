@@ -80,7 +80,7 @@ jobs:
             echo "Committing changes"
 
             git commit --allow-empty -m "Update via CircleCI"
-            git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/Sendrato/navajo.git main
+            git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/Sendrato/navajo.git $CIRCLE_BRANCH
             echo "Push complete"
 
   db_docker:
