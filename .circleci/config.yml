@@ -50,9 +50,6 @@ jobs:
             SUFFIX=`[[ $CIRCLE_BRANCH = "main" ]] && echo "" || echo "-$CIRCLE_BRANCH"`
             echo "Using suffix $SUFFIX"
 
-            echo "Contents of targetplatform/target/repository:"
-            ls -laR targetplatform/target/repository/*
-
             ssh -o StrictHostKeyChecking=no dexelsbutler@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
             scp -r targetplatform/target/repository/* dexelsbutler@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}
 
