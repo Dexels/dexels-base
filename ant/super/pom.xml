@@ -17,7 +17,7 @@
         <navajo.version>5.0.0</navajo.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <tycho-groupid>org.eclipse.tycho</tycho-groupid>
-        <tycho-version>1.7.0</tycho-version>
+        <tycho-version>4.0.9</tycho-version>
     </properties>
 
     <dependencies>

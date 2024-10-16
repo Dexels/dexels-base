@@ -1,7 +1,7 @@
 ARG DEXELS_BASE_COMMIT=unknown
 ARG DEXELS_BASE_REMOTE=unknown
 
-FROM openjdk:11
+FROM openjdk:17
 
 RUN apt-get update && apt-get install -y vim less net-tools git telnet && \
     mkdir /home/navajouser /log /output /storage /temp && \

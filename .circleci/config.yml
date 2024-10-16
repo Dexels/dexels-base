@@ -15,9 +15,9 @@ jobs:
     steps:
       - checkout
 
-      # - restore_cache:
-      #     keys:
-      #       - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+      - restore_cache:
+          keys:
+            - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
       # Install Ant manually from Apache
       - run:
@@ -41,7 +41,7 @@ jobs:
             ant targetplatform -Dversion="${MINORTAG}.${CIRCLE_BUILD_NUM}"
 
             cd targetplatform
-            mvn -s "../.circleci/conf/settings.xml" clean install -B -U -ff
+            mvn -s "../.circleci/conf/settings.xml" install -B -U -ff
             cd ..
 
       - run:
@@ -56,10 +56,10 @@ jobs:
             ssh -o StrictHostKeyChecking=no dexelsbutler@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
             scp -r targetplatform/target/repository/* dexelsbutler@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}
 
-      # - save_cache:
-      #     paths:
-      #       - ~/.m2
-      #     key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
       # - run:
       #     name: Update navajo dependency on dexels-base to latest dexels-base build version (Triggers CI build on navajo)
