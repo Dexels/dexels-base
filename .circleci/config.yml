@@ -41,7 +41,7 @@ jobs:
             ant targetplatform -Dversion="${MINORTAG}.${CIRCLE_BUILD_NUM}"
 
             cd targetplatform
-            mvn -s "../.circleci/conf/settings.xml" install -B -U -ff
+            mvn -s "../.circleci/conf/settings.xml" clean install -B -U -ff
             cd ..
 
       - run:
