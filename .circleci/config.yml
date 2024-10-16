@@ -50,6 +50,9 @@ jobs:
             SUFFIX=`[[ $CIRCLE_BRANCH = "main" ]] && echo "" || echo "-$CIRCLE_BRANCH"`
             echo "Using suffix $SUFFIX"
 
+            echo "Contents of targetplatform/target/repository:"
+            ls -laR targetplatform/target/repository/*
+
             ssh -o StrictHostKeyChecking=no dexelsbutler@repo.dexels.com "mkdir -p /var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}/"
             scp -r targetplatform/target/repository/* dexelsbutler@repo.dexels.com:/var/www/html/repo/eclipse/3rdparty_${MINORTAG}.${CIRCLE_BUILD_NUM}${SUFFIX}
 
@@ -58,30 +61,30 @@ jobs:
             - ~/.m2
           key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
-      - run:
-          name: Update navajo dependency on dexels-base to latest dexels-base build version (Triggers CI build on navajo)
-          command: |
-            mkdir ~/navajocheckout
-            cd ~/navajocheckout
+      # - run:
+      #     name: Update navajo dependency on dexels-base to latest dexels-base build version (Triggers CI build on navajo)
+      #     command: |
+      #       mkdir ~/navajocheckout
+      #       cd ~/navajocheckout
 
-            git clone https://${GITHUB_PERSONAL_TOKEN}@github.com/Sendrato/navajo.git -b "$CIRCLE_BRANCH" --depth 1
+      #       git clone https://${GITHUB_PERSONAL_TOKEN}@github.com/Sendrato/navajo.git -b "$CIRCLE_BRANCH" --depth 1
 
-            ls -l
-            cd navajo/setup/com.dexels.navajo.target
+      #       ls -l
+      #       cd navajo/setup/com.dexels.navajo.target
 
-            DEXELS_BASE_BRANCH="${CIRCLE_BRANCH}" DEXELS_BASE_BUILD="${CIRCLE_BUILD_NUM}" ./updateversion.sh
+      #       DEXELS_BASE_BRANCH="${CIRCLE_BRANCH}" DEXELS_BASE_BUILD="${CIRCLE_BUILD_NUM}" ./updateversion.sh
 
-            # Push changes
-            git config credential.helper 'cache --timeout=120'
-            git config user.email "Dexels Butler"
-            git config user.name "butler@dexels.com"
-            git add .
+      #       # Push changes
+      #       git config credential.helper 'cache --timeout=120'
+      #       git config user.email "Dexels Butler"
+      #       git config user.name "butler@dexels.com"
+      #       git add .
 
-            echo "Committing changes"
+      #       echo "Committing changes"
 
-            git commit --allow-empty -m "Update via CircleCI"
-            git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/Sendrato/navajo.git $CIRCLE_BRANCH
-            echo "Push complete"
+      #       git commit --allow-empty -m "Update via CircleCI"
+      #       git push -q https://${GITHUB_PERSONAL_TOKEN}@github.com/Sendrato/navajo.git $CIRCLE_BRANCH
+      #       echo "Push complete"
 
   db_docker:
     docker:
@@ -180,11 +183,11 @@ workflows:
             - main
             - test
 
-    - db_docker:
-        context:
-        - dexels_docker_hub
-        filters:
-          branches:
-            only:
-            - main
-            - test
+    # - db_docker:
+    #     context:
+    #     - dexels_docker_hub
+    #     filters:
+    #       branches:
+    #         only:
+    #         - main
+    #         - test
