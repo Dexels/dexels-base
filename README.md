@@ -1,6 +1,6 @@
 ## Navajo OSGi Distribution
 
-(force rebuild: 2024-09-13)
+(force rebuild: 2024-12-02)
 
 If you are reading this, you must be interested in building target platforms for Eclipse or base images!
 
