@@ -1,7 +1,7 @@
 ARG DEXELS_BASE_COMMIT=unknown
 ARG DEXELS_BASE_REMOTE=unknown
 
-FROM cimg/openjdk:11.0
+FROM circleci/openjdk:11-jdk
 
 RUN apt-get update && apt-get install -y vim less net-tools git telnet && \
     mkdir /home/navajouser /log /output /storage /temp && \
