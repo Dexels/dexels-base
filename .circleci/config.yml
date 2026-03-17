@@ -97,7 +97,7 @@ jobs:
             TAG=${MINORTAG}.${CIRCLE_BUILD_NUM}${TAGSUFFIX}
             echo "Building tag: $TAG"
             cd ~/repo
-            ls -l
+            ls -lR
             export GIT_REMOTE=$(git config --get remote.origin.url)
             export GIT_COMMIT=$(git rev-parse HEAD)
             echo "Adding remote: ${GIT_REMOTE} and commit: ${GIT_COMMIT}"

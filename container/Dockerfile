@@ -1,7 +1,9 @@
 ARG DEXELS_BASE_COMMIT=unknown
 ARG DEXELS_BASE_REMOTE=unknown
 
-FROM openjdk:11
+FROM cimg/openjdk:11.0
+
+USER root
 
 RUN apt-get update && apt-get install -y vim less net-tools git telnet && \
     mkdir /home/navajouser /log /output /storage /temp && \
@@ -21,4 +23,5 @@ ENV CONSOLE_PASS="{sha-256}eHpwVX+AFnneRThtRif+1CReQTxIkxHnQebptWE8aW4="
 ENV FELIX_OPTS="-Dorg.eclipse.jetty.server.Request.maxFormContentSize=3000000 -Djava.net.preferIPv4Stack=true "
 
 USER navajouser
+
 ENTRYPOINT ["/opt/felix/startup.sh"]
