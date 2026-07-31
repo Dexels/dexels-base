@@ -93,8 +93,8 @@ jobs:
     environment:
       JVM_OPTS: -Xmx1000m
       TERM: dumb
-      ANT_VERSION: apache-ant-1.10.15
-      ANT_HOME: /opt/apache-ant-1.10.15
+      ANT_VERSION: apache-ant-1.10.17
+      ANT_HOME: /opt/apache-ant-1.10.17
     steps:
       - checkout
 
