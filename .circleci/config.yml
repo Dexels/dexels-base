@@ -19,6 +19,18 @@ jobs:
           keys:
             - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
+      - run:
+          name: Install Maven (latest 3.9.x version)
+          command: |
+            # The latest Maven version 3.10.x gives problems with Tycho 4.0.9
+            curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz -o /tmp/maven.tar.gz
+
+            sudo mv -f /opt/apache-maven /opt/apache-maven.original
+            sudo mkdir /opt/apache-maven
+            sudo tar -xzf /tmp/maven.tar.gz -C /opt/apache-maven --strip-components=1
+
+            /opt/apache-maven/bin/mvn -v
+
       # Install Ant manually from Apache
       - run:
           name: Install Ant manually
@@ -101,6 +113,18 @@ jobs:
       - restore_cache:
           keys:
             - maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+
+      - run:
+          name: Install Maven (latest 3.9.x version)
+          command: |
+            # The latest Maven version 3.10.x gives problems with Tycho 4.0.9
+            curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz -o /tmp/maven.tar.gz
+
+            sudo mv -f /opt/apache-maven /opt/apache-maven.original
+            sudo mkdir /opt/apache-maven
+            sudo tar -xzf /tmp/maven.tar.gz -C /opt/apache-maven --strip-components=1
+
+            /opt/apache-maven/bin/mvn -v
 
       # Install Ant manually from Apache
       - run:
