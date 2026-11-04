@@ -10,14 +10,26 @@ jobs:
     environment:
       JVM_OPTS: -Xmx1000m
       TERM: dumb
-      ANT_VERSION: apache-ant-1.10.17
-      ANT_HOME: /opt/apache-ant-1.10.17
+      ANT_VERSION: apache-ant-1.10.18
+      ANT_HOME: /opt/apache-ant-1.10.18
     steps:
       - checkout
 
       - restore_cache:
           keys:
             - maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+
+      - run:
+          name: Install Maven (latest 3.9.x version)
+          command: |
+            # The latest Maven version 3.10.x gives problems with Tycho 4.0.9
+            curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz -o /tmp/maven.tar.gz
+
+            sudo mv -f /opt/apache-maven /opt/apache-maven.original
+            sudo mkdir /opt/apache-maven
+            sudo tar -xzf /tmp/maven.tar.gz -C /opt/apache-maven --strip-components=1
+
+            /opt/apache-maven/bin/mvn -v
 
       # Install Ant manually from Apache
       - run:
@@ -59,6 +71,78 @@ jobs:
           key: maven-repo-targetplatform-{{ .Branch }}-{{ checksum "maven-cache-version" }}
 
       - run:
+          name: Check GitHub token works and configure git credentials
+          command: |
+            if [ -z "${GITHUB_PERSONAL_TOKEN}" ]; then
+              echo "GITHUB_PERSONAL_TOKEN is empty - check project env vars / context"
+              exit 1
+            fi
+
+            # Strip any stray whitespace/newline that crept into the env var value.
+            TOKEN=$(printf '%s' "${GITHUB_PERSONAL_TOKEN}" | tr -d '[:space:]')
+            echo "token length ${#GITHUB_PERSONAL_TOKEN} (${#TOKEN} after trimming whitespace)"
+
+            # Prove the token grants access, instead of only that it is set.
+            #   200 = ok
+            #   401 = invalid or expired token
+            #   404 = token has no access to that repo: missing 'repo' scope, a
+            #         fine-grained token without the repo selected, or a classic
+            #         token not SSO-authorized for the Sendrato org
+            fail=0
+
+            repo=Sendrato/navajo
+            code=$(curl -sS -o /dev/null -w '%{http_code}' \
+              -H "Authorization: Bearer ${TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${repo}")
+            echo "${repo}: HTTP ${code}"
+            [ "${code}" = "200" ] || fail=1
+
+            if [ "${fail}" != "0" ]; then
+              echo "GITHUB_PERSONAL_TOKEN does not grant access to every target repo."
+              exit 1
+            fi
+
+            # Hand the token to git through a credential helper instead of embedding it
+            # in the clone/push URL. Helper credentials are keyed on the host, so they
+            # survive the redirect that drops the user info out of a
+            # https://TOKEN@github.com/... URL -- that redirect is what left git with no
+            # username and made it prompt for one.
+            git config --global credential.helper store
+
+            printf 'https://x-access-token:%s@github.com\n' "${TOKEN}" > ~/.git-credentials
+            chmod 600 ~/.git-credentials
+
+            # CircleCI's checkout step installs a global URL rewrite that turns
+            # https://github.com/... into ssh://git@github.com/..., which sends these
+            # clones over ssh with navajo's checkout key instead of over https with the
+            # token -- and that key has no access to the target repos, so the clone dies
+            # with "ERROR: Repository not found". The original URLs were not rewritten
+            # only because the token in them stopped the prefix from matching.
+            echo "--- global git config before ---"
+            git config --global --list || true
+
+            for name in $(git config --global --name-only --get-regexp 'url\..*\.insteadof' 2>/dev/null || true); do
+              case "${name}" in
+                *github.com*) echo "removing URL rewrite: ${name}"; git config --global --unset-all "${name}" ;;
+              esac
+            done
+
+            echo "--- global git config after ---"
+            git config --global --list || true
+
+            # Confirm the rewrite is gone and the token really can fetch over https,
+            # before any step starts committing.
+            repo=navajo
+            url=$(git ls-remote --get-url "https://github.com/Sendrato/${repo}.git")
+            case "${url}" in
+              https://github.com/*) : ;;
+              *) echo "https URL is still being rewritten to ${url}"; exit 1 ;;
+            esac
+            echo "ls-remote Sendrato/${repo}"
+            git ls-remote --heads "https://github.com/Sendrato/${repo}.git" >/dev/null
+
+      - run:
           name: Update navajo dependency on dexels-base to latest dexels-base build version (Triggers CI build on navajo)
           command: |
             mkdir ~/navajocheckout
@@ -93,14 +177,26 @@ jobs:
     environment:
       JVM_OPTS: -Xmx1000m
       TERM: dumb
-      ANT_VERSION: apache-ant-1.10.17
-      ANT_HOME: /opt/apache-ant-1.10.17
+      ANT_VERSION: apache-ant-1.10.18
+      ANT_HOME: /opt/apache-ant-1.10.18
     steps:
       - checkout
 
       - restore_cache:
           keys:
             - maven-repo-v1-{{ .Branch }}-{{ checksum "maven-cache-version" }}
+
+      - run:
+          name: Install Maven (latest 3.9.x version)
+          command: |
+            # The latest Maven version 3.10.x gives problems with Tycho 4.0.9
+            curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz -o /tmp/maven.tar.gz
+
+            sudo mv -f /opt/apache-maven /opt/apache-maven.original
+            sudo mkdir /opt/apache-maven
+            sudo tar -xzf /tmp/maven.tar.gz -C /opt/apache-maven --strip-components=1
+
+            /opt/apache-maven/bin/mvn -v
 
       # Install Ant manually from Apache
       - run:
